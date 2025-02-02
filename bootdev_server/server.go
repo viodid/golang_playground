@@ -6,14 +6,14 @@ import (
 )
 
 func server() {
-	hits := apiConfig{}
+	api := apiConfig{}
 
 	mux := http.NewServeMux()
 
 	handler := http.FileServer(http.Dir('.'))
 	handler = http.StripPrefix("/app", handler)
 
-	mux.Handle("/app/", hits.middlewareMetricsInc(handler))
+	mux.Handle("/app/", api.middlewareMetricsInc(handler))
 	mux.HandleFunc("/healthz", func(writer http.ResponseWriter, request *http.Request) {
 		request.Header = map[string][]string{
 			"Content-Type": {"text/plain", "charset=utf-8"},
@@ -24,8 +24,9 @@ func server() {
 			return
 		}
 	})
+	mux.HandleFunc("/reset", api.reset)
 
-	mux.HandleFunc("/metrics", hits.handler)
+	mux.HandleFunc("/metrics", api.handler)
 
 	server := &http.Server{
 		Addr:    ":8080",

@@ -26,3 +26,7 @@ func (c *apiConfig) handler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 }
+
+func (c *apiConfig) reset(writer http.ResponseWriter, request *http.Request) {
+	c.fileServerHits.Store(0)
+}
