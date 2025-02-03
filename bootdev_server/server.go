@@ -6,7 +6,7 @@ import (
 )
 
 func server() {
-	api := apiConfig{}
+	api := &apiConfig{}
 
 	mux := http.NewServeMux()
 
