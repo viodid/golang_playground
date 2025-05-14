@@ -14,7 +14,7 @@ func ex01() []int {
 	r := rand.New(rand.NewSource(42))
 	for n := range 100 {
 		rn := r.Int() % 100
-		fmt.Println(n, rn)
+		fmt.Println(n, rn) // TODO: rm the need of using n
 		out = append(out, rn)
 	}
 	return out
