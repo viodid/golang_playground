@@ -9,6 +9,7 @@ func main() {
 	rs := ex01()
 	fmt.Println(rs)
 	ex02(rs)
+	ex03()
 }
 
 func ex01() []int {
@@ -33,4 +34,14 @@ func ex02(rs []int) {
 			fmt.Println("Never mind", v)
 		}
 	}
+}
+
+func ex03() {
+	var total int
+	for i := range 10 {
+		total := i + total
+		fmt.Println(total)
+	}
+	fmt.Println(total)
+
 }
