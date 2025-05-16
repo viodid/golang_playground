@@ -6,16 +6,31 @@ import (
 )
 
 func main() {
-	fmt.Println(ex01())
+	rs := ex01()
+	fmt.Println(rs)
+	ex02(rs)
 }
 
 func ex01() []int {
 	out := make([]int, 0, 100)
 	r := rand.New(rand.NewSource(42))
-	for n := range 100 {
+	for _ = range 100 {
 		rn := r.Int() % 100
-		fmt.Println(n, rn) // TODO: rm the need of using n
 		out = append(out, rn)
 	}
 	return out
+}
+
+func ex02(rs []int) {
+	for _, v := range rs {
+		if v%2 == 0 && v%3 == 0 {
+			fmt.Println("Six!", v)
+		} else if v%2 == 0 {
+			fmt.Println("Two!", v)
+		} else if v%3 == 0 {
+			fmt.Println("Three!", v)
+		} else {
+			fmt.Println("Never mind", v)
+		}
+	}
 }
