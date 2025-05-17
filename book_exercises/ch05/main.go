@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func exponentBase(base int) func(int) int {
 	return func(exponent int) int {
@@ -15,4 +17,7 @@ func exponentBase(base int) func(int) int {
 func main() {
 	base3 := exponentBase(3)
 	fmt.Println(base3(0))
+	defer fmt.Println("defer executed")
+	//log.Fatal("exit")
+	fmt.Println(base3(4))
 }
