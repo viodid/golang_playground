@@ -3,6 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
+	"os"
+	"runtime/debug"
 	"strconv"
 )
 
@@ -29,6 +32,11 @@ func main() {
 		}
 		fmt.Println(val, n)
 	}
+	len, err := fileLen("test.txt")
+	if err != nil {
+		fmt.Println("error: ", err)
+	}
+	fmt.Println("file len:", len)
 }
 
 func exponentBase(base int) func(int) int {
@@ -76,4 +84,25 @@ func div(x, y int) (int, error) {
 		return 0, errors.New("division by zero")
 	}
 	return x / y, nil
+}
+
+func fileLen(filename string) (int, error) {
+	f, err := os.OpenFile(filename, os.O_RDONLY, 0o644)
+	if err != nil {
+		return 0, err
+	}
+	defer f.Close()
+	buffer := make([]byte, 10, 10)
+	tl := 0
+	l := 0
+	for err != io.EOF {
+		if err != nil {
+			return 0, err
+		}
+		tl, err = f.Read(buffer)
+		l += tl
+		fmt.Println(tl, err)
+	}
+	debug.PrintStack()
+	return l, nil
 }
