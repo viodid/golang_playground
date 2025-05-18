@@ -37,6 +37,10 @@ func main() {
 		fmt.Println("error: ", err)
 	}
 	fmt.Println("file len:", len)
+
+	helloPrefix := prefixer("Hello")
+	fmt.Println(helloPrefix("Alice"))
+	fmt.Println(helloPrefix("Bob"))
 }
 
 func exponentBase(base int) func(int) int {
@@ -105,4 +109,10 @@ func fileLen(filename string) (int, error) {
 	}
 	debug.PrintStack()
 	return l, nil
+}
+
+func prefixer(i string) func(string) string {
+	return func(j string) string {
+		return i + j
+	}
 }
