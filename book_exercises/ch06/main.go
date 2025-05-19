@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+const ITER int = 100_000_000
+
 type Person struct {
 	FirstName string
 	LastName  string
@@ -9,31 +11,12 @@ type Person struct {
 }
 
 func main() {
-	person1 := MakePerson("Bob", "Smith", 42)
-	person2 := MakePerson("Alice", "Brown", 47)
-	fmt.Println(person1, person2)
-	ss := []string{"hey", "there"}
-	s := "madame"
-	UpdateSlice(ss, s)
-	fmt.Println("after update", ss)
-	GrowSlice(ss, s)
-	fmt.Println("after grow", ss)
+	fmt.Println(CreateBigPersonSlice()[:1])
 }
-
-func MakePerson(fn, ln string, ag int) Person {
-	return Person{fn, ln, ag}
-}
-
-func MakePersonPointer(fn, ln string, ag int) *Person {
-	return &Person{fn, ln, ag}
-}
-
-func UpdateSlice(ss []string, s string) {
-	ss[len(ss)-1] = s
-	fmt.Println(ss)
-}
-
-func GrowSlice(ss []string, s string) {
-	ss = append(ss, s)
-	fmt.Println(ss)
+func CreateBigPersonSlice() []Person {
+	s := make([]Person, 0, ITER)
+	for _ = range ITER {
+		s = append(s, Person{"Bob", "Smith", 42})
+	}
+	return s
 }
