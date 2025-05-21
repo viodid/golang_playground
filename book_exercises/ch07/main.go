@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crypto/rand"
 	"errors"
 	"fmt"
+	"math/big"
 	"slices"
 )
 
@@ -30,14 +32,27 @@ func (l *League) MatchResult(team1 string, score1 int, team2 string, score2 int)
 	return errors.New("Team name is not in League")
 }
 
+func (l League) Ranking() []string {
+	out := make([]string, 0, len(l.Teams))
+	for k, v := range l.Wins {
+		fmt.Println(k, v)
+	}
+	return out
+}
+
 func main() {
 	t1 := Team{"t1Telecom", []string{"bob", "alice"}}
 	t2 := Team{"g2", []string{"foo", "bar"}}
-	l := League{[]string{t1.name, t2.name}, map[string]int{}}
-	err := l.MatchResult(t1.name, 42, t2.name, 13)
-	if err != nil {
-		panic(err)
+	t3 := Team{"fnatic", []string{"feviben", "hilyssang"}}
+	l := League{[]string{t1.name, t2.name, t3.name}, map[string]int{}}
+	for i := range 20 {
+		r := big.NewInt(100)
+		err := l.MatchResult(t1.name, rand.Int(i, r), t2.name, 13)
+		if err != nil {
+			panic(err)
+		}
 	}
 	fmt.Println(t1, t2)
 	fmt.Println(l)
+	fmt.Println(l.Ranking())
 }
