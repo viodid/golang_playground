@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"slices"
+)
 
 type Team struct {
 	name        string
@@ -13,12 +17,17 @@ type League struct {
 }
 
 func (l *League) MatchResult(team1 string, score1 int, team2 string, score2 int) error {
+	var matchName string
 	if score1 > score2 {
-		l.Wins[team1] += 1
+		matchName = team1
 	} else if score2 > score1 {
-		l.Wins[team2] += 1
+		matchName = team2
 	}
-	return nil
+	if slices.Contains(l.Teams, matchName) == true {
+		l.Wins[matchName] += 1
+		return nil
+	}
+	return errors.New("Team name is not in League")
 }
 
 func main() {
@@ -29,5 +38,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(t1, t2)
 	fmt.Println(l)
 }
