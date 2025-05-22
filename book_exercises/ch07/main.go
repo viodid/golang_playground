@@ -33,12 +33,29 @@ func (l *League) MatchResult(team1 string, score1 int, team2 string, score2 int)
 	return errors.New("Team name is not in League")
 }
 
-func (l League) Ranking() []string {
+func (l League) Ranking() ([]string, []int) {
 	out := make([]string, 0, len(l.Teams))
+	scores := make([]int, 0, len(l.Teams))
+	out = append(out, "g2")
+	scores = append(scores, l.Wins["g2"])
 	for k, v := range l.Wins {
 		fmt.Println(k, v)
+		if k == "g2" {
+			continue
+		}
+		for i, s := range scores {
+			if v > s {
+				scores = slices.Insert(scores, i, v)
+				out = slices.Insert(out, i, k)
+				break
+			}
+		}
+		if !slices.Contains(out, k) {
+			scores = append(scores, v)
+			out = append(out, k)
+		}
 	}
-	return out
+	return out, scores
 }
 
 func main() {
@@ -46,7 +63,7 @@ func main() {
 	t2 := Team{"g2", []string{"foo", "bar"}}
 	t3 := Team{"fnatic", []string{"feviben", "hilyssang"}}
 	l := League{[]string{t1.name, t2.name, t3.name}, map[string]int{}}
-	for range 20 {
+	for range 1 {
 		err := l.MatchResult(t1.name, rand.Intn(100), t2.name, rand.Intn(100))
 		if err != nil {
 			panic(err)
