@@ -1,10 +1,9 @@
 package main
 
 import (
-	"crypto/rand"
 	"errors"
 	"fmt"
-	"math/big"
+	"math/rand"
 	"slices"
 )
 
@@ -24,6 +23,8 @@ func (l *League) MatchResult(team1 string, score1 int, team2 string, score2 int)
 		matchName = team1
 	} else if score2 > score1 {
 		matchName = team2
+	} else {
+		return nil
 	}
 	if slices.Contains(l.Teams, matchName) == true {
 		l.Wins[matchName] += 1
@@ -45,9 +46,16 @@ func main() {
 	t2 := Team{"g2", []string{"foo", "bar"}}
 	t3 := Team{"fnatic", []string{"feviben", "hilyssang"}}
 	l := League{[]string{t1.name, t2.name, t3.name}, map[string]int{}}
-	for i := range 20 {
-		r := big.NewInt(100)
-		err := l.MatchResult(t1.name, rand.Int(i, r), t2.name, 13)
+	for range 20 {
+		err := l.MatchResult(t1.name, rand.Intn(100), t2.name, rand.Intn(100))
+		if err != nil {
+			panic(err)
+		}
+		err = l.MatchResult(t2.name, rand.Intn(100), t3.name, rand.Intn(100))
+		if err != nil {
+			panic(err)
+		}
+		err = l.MatchResult(t1.name, rand.Intn(100), t3.name, rand.Intn(100))
 		if err != nil {
 			panic(err)
 		}
