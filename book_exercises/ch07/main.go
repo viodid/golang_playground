@@ -58,12 +58,28 @@ func (l League) Ranking() ([]string, []int) {
 	return out, scores
 }
 
+type Ranker interface {
+	Ranking() []string
+}
+
+func Ranking() []string {
+	first := "Hey there!"
+	second := "Unga Bunga"
+	out := make([]string, 0, 2)
+	out = append(out, first)
+	out = append(out, second)
+	return out
+}
+
+func ex03() {
+}
+
 func main() {
 	t1 := Team{"t1Telecom", []string{"bob", "alice"}}
 	t2 := Team{"g2", []string{"foo", "bar"}}
 	t3 := Team{"fnatic", []string{"feviben", "hilyssang"}}
 	l := League{[]string{t1.name, t2.name, t3.name}, map[string]int{}}
-	for range 1 {
+	for range 10 {
 		err := l.MatchResult(t1.name, rand.Intn(100), t2.name, rand.Intn(100))
 		if err != nil {
 			panic(err)
