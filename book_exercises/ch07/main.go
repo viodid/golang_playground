@@ -3,7 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"math/rand"
+	"os"
 	"slices"
 )
 
@@ -71,7 +73,14 @@ func Ranking() []string {
 	return out
 }
 
-func ex03() {
+func RankPrinter(r Ranker, w io.Writer) {
+	for _, s := range r.Ranking() {
+		n, err := io.WriteString(w, s)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(n)
+	}
 }
 
 func main() {
@@ -96,4 +105,13 @@ func main() {
 	fmt.Println(t1, t2)
 	fmt.Println(l)
 	fmt.Println(l.Ranking())
+	fmt.Println("===")
+	f, err := os.Open("./file")
+	defer f.Close()
+	if err != nil {
+		panic(err)
+	}
+	var myRanker Ranker
+	myRanker = Ranking
+	RankPrinter(myRanker, f)
 }
