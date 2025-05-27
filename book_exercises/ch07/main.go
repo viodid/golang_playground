@@ -35,7 +35,7 @@ func (l *League) MatchResult(team1 string, score1 int, team2 string, score2 int)
 	return errors.New("Team name is not in League")
 }
 
-func (l League) Ranking() ([]string, []int) {
+func (l League) Ranking() []string {
 	out := make([]string, 0, len(l.Teams))
 	scores := make([]int, 0, len(l.Teams))
 	out = append(out, "g2")
@@ -57,25 +57,16 @@ func (l League) Ranking() ([]string, []int) {
 			out = append(out, k)
 		}
 	}
-	return out, scores
+	return out
 }
 
 type Ranker interface {
 	Ranking() []string
 }
 
-func Ranking() []string {
-	first := "Hey there!"
-	second := "Unga Bunga"
-	out := make([]string, 0, 2)
-	out = append(out, first)
-	out = append(out, second)
-	return out
-}
-
 func RankPrinter(r Ranker, w io.Writer) {
 	for _, s := range r.Ranking() {
-		n, err := io.WriteString(w, s)
+		n, err := io.WriteString(w, s+"\n")
 		if err != nil {
 			panic(err)
 		}
@@ -106,12 +97,10 @@ func main() {
 	fmt.Println(l)
 	fmt.Println(l.Ranking())
 	fmt.Println("===")
-	f, err := os.Open("./file")
+	f, err := os.OpenFile("./file", os.O_RDWR, 0644)
 	defer f.Close()
 	if err != nil {
 		panic(err)
 	}
-	var myRanker Ranker
-	myRanker = Ranking
-	RankPrinter(myRanker, f)
+	RankPrinter(l, f)
 }
