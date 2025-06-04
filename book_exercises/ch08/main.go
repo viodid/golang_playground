@@ -33,6 +33,21 @@ func (mf myFloat) String() string {
 	return fmt.Sprintf("%f", mf)
 }
 
+// == EX03 ==
+type List[T comparable] struct {
+	value T
+	next  *List[T]
+}
+
+func (l List[T]) Add(t T) {
+}
+
+func (l List[T]) Insert(t T, i int) {
+}
+
+func (l List[T]) Index(t T) int {
+}
+
 func main() {
 	var x float32 = 2.3
 	var y int8 = 42
