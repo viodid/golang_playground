@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"unsafe"
 )
 
 // == EX01 ==
@@ -39,13 +40,34 @@ type List[T comparable] struct {
 	next  *List[T]
 }
 
-func (l List[T]) Add(t T) {
+// In theory, l would be a deep copy of the obj (I need to clarify this point, as in C there is no deep copy).
+// So no node would be appended in the caller obj.
+func (l **List[T]) Add(t T) {
+	//fmt.Printf("%p - %p\n", l.next, l)
+	if *l == nil {
+		*l = &List[T]{
+			value: t,
+			next:  nil,
+		}
+		return
+	}
+	list := *l
+	for list.next != nil {
+		list = list.next
+	}
+	list.next = &List[T]{
+		value: t,
+		next:  nil,
+	}
+	fmt.Printf("size struct: %d\n", unsafe.Sizeof(list))
+	fmt.Println("inside:", list.next)
 }
 
 func (l List[T]) Insert(t T, i int) {
 }
 
 func (l List[T]) Index(t T) int {
+	return -1
 }
 
 func main() {
@@ -54,4 +76,11 @@ func main() {
 	fmt.Println(double(x), double(y))
 	var z myFloat = 42.42
 	printValue(z)
+
+	l := nil
+	&l.Add("hey")
+	for l != nil {
+		fmt.Println(l)
+		l = l.next
+	}
 }
