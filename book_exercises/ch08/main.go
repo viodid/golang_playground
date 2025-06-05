@@ -42,25 +42,17 @@ type List[T comparable] struct {
 
 // In theory, l would be a deep copy of the obj (I need to clarify this point, as in C there is no deep copy).
 // So no node would be appended in the caller obj.
-func (l **List[T]) Add(t T) {
-	//fmt.Printf("%p - %p\n", l.next, l)
-	if *l == nil {
-		*l = &List[T]{
-			value: t,
-			next:  nil,
-		}
-		return
+func (l *List[T]) Add(t T) {
+	fmt.Printf("%p - %p\n", l.next, l)
+	for l.next != nil {
+		l = l.next
 	}
-	list := *l
-	for list.next != nil {
-		list = list.next
-	}
-	list.next = &List[T]{
+	l.next = &List[T]{
 		value: t,
 		next:  nil,
 	}
-	fmt.Printf("size struct: %d\n", unsafe.Sizeof(list))
-	fmt.Println("inside:", list.next)
+	fmt.Printf("size struct: %d\n", unsafe.Sizeof(l))
+	fmt.Println("inside:", l.next)
 }
 
 func (l List[T]) Insert(t T, i int) {
@@ -77,8 +69,8 @@ func main() {
 	var z myFloat = 42.42
 	printValue(z)
 
-	l := nil
-	&l.Add("hey")
+	l := &List[string]{}
+	l.Add("hey")
 	for l != nil {
 		fmt.Println(l)
 		l = l.next
