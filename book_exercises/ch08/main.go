@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"unsafe"
 )
@@ -40,6 +41,13 @@ type List[T comparable] struct {
 	next  *List[T]
 }
 
+func newList[T comparable](t T) *List[T] {
+	return &List[T]{
+		value: t,
+		next:  nil,
+	}
+}
+
 // In theory, l would be a deep copy of the obj (I need to clarify this point, as in C there is no deep copy).
 // So no node would be appended in the caller obj.
 func (l *List[T]) Add(t T) {
@@ -47,15 +55,29 @@ func (l *List[T]) Add(t T) {
 	for l.next != nil {
 		l = l.next
 	}
-	l.next = &List[T]{
-		value: t,
-		next:  nil,
-	}
+	l.next = newList(t)
 	fmt.Printf("size struct: %d\n", unsafe.Sizeof(l))
 	fmt.Println("inside:", l.next)
 }
 
-func (l List[T]) Insert(t T, i int) {
+func (l *List[T]) Insert(t T, i int) error {
+	n := newList(t)
+	if i == 0 {
+		n.next = l
+		return nil
+	}
+	c := 0
+	for l != nil && c != i-1 {
+		l = l.next
+		c++
+	}
+	if l == nil {
+		return errors.New("index out of limits")
+	}
+	nextNode := l.next
+	l.next = n
+	n.next = nextNode
+	return nil
 }
 
 func (l List[T]) Index(t T) int {
