@@ -48,8 +48,6 @@ func newList[T comparable](t T) *List[T] {
 	}
 }
 
-// In theory, l would be a deep copy of the obj (I need to clarify this point, as in C there is no deep copy).
-// So no node would be appended in the caller obj.
 func (l *List[T]) Add(t T) {
 	fmt.Printf("%p - %p\n", l.next, l)
 	for l.next != nil {
@@ -63,8 +61,7 @@ func (l *List[T]) Add(t T) {
 func (l *List[T]) Insert(t T, i int) error {
 	n := newList(t)
 	if i == 0 {
-		n.next = l
-		return nil
+		return errors.New("index 0 is not supported")
 	}
 	c := 0
 	for l != nil && c != i-1 {
@@ -104,7 +101,7 @@ func main() {
 
 	l := newList("first node")
 	l.Add("hey")
-	err := l.Insert("another first node?", 0)
+	err := l.Insert("another first node?", 1)
 	if err != nil {
 		panic(err.Error)
 	}
