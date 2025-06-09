@@ -81,6 +81,14 @@ func (l *List[T]) Insert(t T, i int) error {
 }
 
 func (l List[T]) Index(t T) int {
+	i := 0
+	for l.next != nil {
+		if l.value == t {
+			return i
+		}
+		l = *l.next
+		i++
+	}
 	return -1
 }
 
