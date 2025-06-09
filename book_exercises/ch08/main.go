@@ -80,13 +80,16 @@ func (l *List[T]) Insert(t T, i int) error {
 	return nil
 }
 
-func (l List[T]) Index(t T) int {
+func (l *List[T]) Index(t T) int {
+	if l == nil {
+		return -1
+	}
 	i := 0
-	for l.next != nil {
+	for l != nil {
 		if l.value == t {
 			return i
 		}
-		l = *l.next
+		l = l.next
 		i++
 	}
 	return -1
@@ -99,8 +102,13 @@ func main() {
 	var z myFloat = 42.42
 	printValue(z)
 
-	l := &List[string]{}
+	l := newList("first node")
 	l.Add("hey")
+	err := l.Insert("another first node?", 0)
+	if err != nil {
+		panic(err.Error)
+	}
+	fmt.Printf("index: %d\n", l.Index("hey"))
 	for l != nil {
 		fmt.Println(l)
 		l = l.next
